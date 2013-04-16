@@ -1,22 +1,24 @@
+REBAR=rebar
 ERL=erl
-ERLC=erlc
-APP=amf
+
+.PHONY: test
 
 all: compile
 
 compile:
-	@$(ERL) -make
+	@$(REBAR) compile
 
 clean:
-	@echo "removing:"
-	@rm -fv ebin/*.beam
+	@$(REBAR) clean
 
 docs:
-	@$(ERL) -noshell -run edoc_run application '$(APP)' '"."' '[]'
+	@$(REBAR) doc
 
 clean-docs:
 	-@rm -f doc/edoc-info doc/*.html doc/*.css doc/*.png
 
-test: compile
-	@$(ERL) -pa ebin -eval "eunit:test({application,$(APP)})" \
-	-noshell -s init stop
+test:
+	@$(REBAR) eunit
+
+run:
+	@$(ERL) -pa ebin
